@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f6f2" />
+    <title>Pagewise — Personal Reading Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside>
+        <div class="brand">
+          <div class="brand-mark">p</div>
+          pagewise
+        </div>
+        <div class="nav-label">Workspace</div>
+        <nav class="nav">
+          <button class="active" data-view="dashboard">
+            <span class="ico">⌂</span><span>Dashboard</span></button
+          ><button data-view="library">
+            <span class="ico">▤</span><span>My library</span></button
+          ><button data-view="history">
+            <span class="ico">◷</span><span>Reading history</span>
+          </button>
+        </nav>
+        <div class="side-spacer"></div>
+        <div class="quote">
+          <div class="quote-mark">“</div>
+          <p>A reader lives a thousand lives before he dies.</p>
+          <span>— George R. R. Martin</span>
+        </div>
+        <div class="profile">
+          <div class="avatar" id="profileAvatar">A</div>
+          <div>
+            <strong id="profileName">Alex Morgan</strong
+            ><small>Personal library</small>
+          </div>
+        </div>
+      </aside>
+      <main>
+        <div class="topbar">
+          <div class="breadcrumb">
+            My workspace <span style="color: #c8c9c2"> / </span>
+            <span id="crumb">Dashboard</span>
+          </div>
+          <div class="top-actions">
+            <button class="icon-btn" title="Reminders" id="reminderBtn">
+              ♧<i class="dot"></i></button
+            ><button class="icon-btn" title="Settings" id="settingsBtn">
+              ⚙
+            </button>
+          </div>
+        </div>
+        <section class="welcome">
+          <div>
+            <div class="eyebrow" id="greeting">YOUR READING SPACE</div>
+            <h1 id="pageTitle">
+              Good morning, Alex
+              <span style="font-family: &quot;DM Sans&quot;; font-size: 27px"
+                >☀</span
+              >
+            </h1>
+            <p>Every page is a little progress. Keep going.</p>
+          </div>
+          <button class="primary" id="addBtn">
+            <span class="plus">＋</span
+            ><span class="add-label">Add a book</span>
+          </button>
+        </section>
+        <section class="stats">
+          <div class="stat">
+            <div class="stat-head">
+              Currently reading <span class="stat-icon">▤</span>
+            </div>
+            <strong id="sReading">0</strong>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              Books completed <span class="stat-icon">✓</span>
+            </div>
+            <strong id="sCompleted">0</strong>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              Pages this month <span class="stat-icon">↗</span>
+            </div>
+            <strong id="sPages">0 <small>pages</small></strong>
+          </div>
+          <div class="stat">
+            <div class="stat-head">
+              Reading streak <span class="stat-icon">♨</span>
+            </div>
+            <strong>7 <small>days</small></strong>
+          </div>
+        </section>
+        <section id="currentSection">
+          <div class="section-head">
+            <div>
+              <h2>Pick up where you left off</h2>
+              <p>A small chapter today adds up.</p>
+            </div>
+            <button class="text-link" id="continueLink">
+              View all books →
+            </button>
+          </div>
+          <div id="currentCard"></div>
+        </section>
+        <section>
+          <div class="section-head library-head">
+            <div>
+              <h2 id="shelfTitle">Your reading shelf</h2>
+              <p id="shelfSub">A home for the stories you’re exploring.</p>
+            </div>
+            <button class="text-link" id="seeAll">See all →</button>
+          </div>
+          <div class="toolbar">
+            <div class="search">
+              <span>⌕</span
+              ><input
+                id="search"
+                placeholder="Search your books…"
+                aria-label="Search books"
+              />
+            </div>
+            <select id="filter">
+              <option value="all">All books</option>
+              <option value="reading">Reading</option>
+              <option value="planned">Want to read</option>
+              <option value="completed">Completed</option></select
+            ><select id="sort">
+              <option value="recent">Recently added</option>
+              <option value="title">Title A–Z</option>
+              <option value="priority">Priority</option>
+              <option value="deadline">Due date</option>
+            </select>
+            <div class="view-toggle">
+              <button class="active" id="gridBtn" title="Grid view">▦</button
+              ><button id="listBtn" title="List view">☰</button>
+            </div>
+          </div>
+          <div class="book-grid" id="bookGrid"></div>
+        </section>
+      </main>
+    </div>
+    <div class="modal-backdrop" id="modalBackdrop">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <div class="modal-head">
+          <h2 id="modalTitle">Add a book</h2>
+          <button class="close" id="closeModal" aria-label="Close">×</button>
+        </div>
+        <form id="bookForm">
+          <input type="hidden" id="bookId" />
+          <div class="form-grid">
+            <div class="field full">
+              <label for="title">Book title *</label
+              ><input
+                id="title"
+                required
+                maxlength="70"
+                placeholder="e.g. The Midnight Library"
+              />
+            </div>
+            <div class="field full">
+              <label for="author">Author *</label
+              ><input
+                id="author"
+                required
+                maxlength="60"
+                placeholder="e.g. Matt Haig"
+              />
+            </div>
+            <div class="field">
+              <label for="category">Category</label
+              ><select id="category">
+                <option>Fiction</option>
+                <option>Non-fiction</option>
+                <option>Fantasy</option>
+                <option>Mystery</option>
+                <option>Classics</option>
+                <option>Biography</option>
+                <option>Science</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="priority">Priority</label
+              ><select id="priority">
+                <option value="1">Low</option>
+                <option value="2" selected>Medium</option>
+                <option value="3">High</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="status">Status</label
+              ><select id="status">
+                <option value="planned">Want to read</option>
+                <option value="reading">Currently reading</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pages">Total pages</label
+              ><input
+                id="pages"
+                type="number"
+                min="1"
+                max="50000"
+                placeholder="320"
+              />
+            </div>
+            <div class="field">
+              <label for="currentPage">Current page</label
+              ><input id="currentPage" type="number" min="0" placeholder="0" />
+            </div>
+            <div class="field">
+              <label for="dueDate">Target date</label
+              ><input id="dueDate" type="date" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="secondary" id="cancelModal">
+              Cancel</button
+            ><button class="primary" type="submit">Save book</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-backdrop" id="nameBackdrop">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="nameModalTitle"
+      >
+        <div class="modal-head">
+          <h2 id="nameModalTitle">Your profile</h2>
+          <button class="close" id="closeName" aria-label="Close">×</button>
+        </div>
+        <form id="nameForm">
+          <div class="field">
+            <label for="nameInput">What should we call you?</label
+            ><input
+              id="nameInput"
+              maxlength="40"
+              required
+              placeholder="Enter your name"
+            />
+          </div>
+          <div class="form-actions">
+            <button type="button" class="secondary" id="cancelName">
+              Cancel</button
+            ><button class="primary" type="submit">Save name</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script src="script.js" defer></script>
+  </body>
+</html>
